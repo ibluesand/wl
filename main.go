@@ -9,7 +9,7 @@ import (
     path "path/filepath"
 )
 
-var HOME string
+var W_HOME string
 
 func main() {
     app := cli.NewApp()
@@ -29,12 +29,12 @@ func main() {
             },
         },
         {
-            Name:      "get",
-            Aliases:     []string{"g"},
-            Usage:     "wg get",
+            Name:      "install",
+            Aliases:     []string{"i"},
+            Usage:     "wg install",
             Action:  func(c *cli.Context) {
                 home()
-                get(c)
+                install(c)
             },
         },
     }
@@ -74,21 +74,15 @@ func test(c *cli.Context) {
 
 
 func home() {
-//    well_home := os.Getenv("WELL_HOME")
-//    if well_home != "" {
-//        println("["+well_home+"]")
-//    } else {
-//        os.Setenv("WELL_HOME", "~/wellspace")
-//    }
-//
-//    well_home = os.Getenv("WELL_HOME")
-//    println("["+well_home+"]")
-    HOME = os.Getenv("HOME")
+    W_HOME = os.Getenv("W_HOME")
+    if W_HOME == "" {
+        println("Please set path W_HOME.")
+        os.Exit(0)
+    }
 
 }
 
 func pwd() {
-
     cmd := exec.Command("pwd")
     out, err := cmd.Output()
     if err != nil {
@@ -103,35 +97,35 @@ func cd(path string) {
 }
 
 func mkdir(path string) {
-    println("mkdir:" + path)
+    //println("mkdir:" + path)
     exec.Command("mkdir", "-p", path)
 }
 
 func git_get(host, user, repo string) {
 
-    pwd()
+    //pwd()
 
-    userpath := HOME + string(path.Separator) + "workspace"+ string(path.Separator)+ host + string(path.Separator) + user
+    userpath := W_HOME + string(path.Separator)+ host + string(path.Separator) + user
     mkdir(userpath)
 
     url := "https://" + host + string(path.Separator) + user + string(path.Separator) + repo + ".git"
 
     local := userpath + string(path.Separator) + repo
 
+    println("Cloning into '"+ repo + "'...")
     cmd := exec.Command("git", "clone", url, local)
-    out, err := cmd.Output()
+    _, err := cmd.Output()
     if err != nil {
-        println(err)
+        println("ERROR:",err.Error())
     }
-    println(string(out))
 }
 
 
-func get(c *cli.Context) {
+func install(c *cli.Context) {
     url := c.Args().First()
     urls := strings.Split(url, "/")
     if len(urls)  < 3 {
-        println("sub params wrong")
+        println("sub gs wrong")
     } else {
         host := urls[0]
         user := urls[1]
