@@ -13,8 +13,8 @@ var W_HOME string
 
 func main() {
     app := cli.NewApp()
-    app.Name = "wg"
-    app.Usage = "wg is a git tool for downloads git repo project"
+    app.Name = "wl"
+    app.Usage = "wl is a git tool for downloads git repo project"
     app.Action = func(c *cli.Context) {
         println("Welcome to wg.")
     }
@@ -22,16 +22,17 @@ func main() {
         {
             Name:      "test",
             Aliases:     []string{"t"},
-            Usage:     "wg test",
+            Usage:     "wl test",
             Action:  func(c *cli.Context) {
                 test(c)
                 home()
             },
         },
         {
-            Name:      "install",
-            Aliases:     []string{"i"},
-            Usage:     "wg install",
+
+            Name:      "get",
+            Aliases:     []string{"g"},
+            Usage:     "wl get",
             Action:  func(c *cli.Context) {
                 home()
                 install(c)
