@@ -16,7 +16,7 @@ func main() {
     app.Name = "wl"
     app.Usage = "wl is a git tool for downloads git repo project"
     app.Action = func(c *cli.Context) {
-        println("Welcome to wg.")
+        println("Welcome to wl.")
     }
     app.Commands = []cli.Command{
         {
@@ -40,7 +40,11 @@ func main() {
         },
     }
 
-    app.Run(os.Args)
+    err := app.Run(os.Args)
+
+    if err != nil {
+        println(err)
+    }
 }
 
 func test(c *cli.Context) {
@@ -83,26 +87,26 @@ func home() {
 
 }
 
-func pwd() {
-    cmd := exec.Command("pwd")
-    out, err := cmd.Output()
-    if err != nil {
-        println(err)
-    }
-    println("pwd:" + string(out))
-}
+//func pwd() {
+//    cmd := exec.Command("pwd")
+//    out, err := cmd.Output()
+//    if err != nil {
+//        println(err)
+//    }
+//    println("pwd:" + string(out))
+//}
 
-func cd(path string) {
-    println("cd:"+ path)
-    exec.Command("cd", path)
-}
+//func cd(path string) {
+//    println("cd:"+ path)
+//    exec.Command("cd", path)
+//}
 
 func mkdir(path string) {
     //println("mkdir:" + path)
     exec.Command("mkdir", "-p", path)
 }
 
-func git_get(host, user, repo string) {
+func gitGet(host, user, repo string) {
 
     //pwd()
 
@@ -114,7 +118,7 @@ func git_get(host, user, repo string) {
     local := userpath + string(path.Separator) + repo
 
     println("Cloning into '"+ repo + "'...")
-    cmd := exec.Command("git", "clone", url, local)
+    cmd := exec.Command("git", "clone", "--progress", url, local)
     _, err := cmd.Output()
     if err != nil {
         println("ERROR:",err.Error())
@@ -132,6 +136,6 @@ func install(c *cli.Context) {
         user := urls[1]
         repo := urls[2]
         println( host + ":" + user + ":" + repo)
-        git_get(host, user,repo)
+        gitGet(host, user,repo)
     }
 }
